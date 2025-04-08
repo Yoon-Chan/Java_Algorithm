@@ -3,7 +3,13 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         PriorityQueue<Point> pq = new PriorityQueue<>(
-            (o1, o2) -> o1.d - o2.d
+            (o1, o2) -> {
+                if(o1.d != o2.d) {
+                    return o1.d - o2.d;
+                } else { 
+                    return o1.index - o2.index;
+                }
+            }
         );
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
