@@ -9,25 +9,16 @@ public class Main {
             String day = sc.next();
             String weather = sc.next();
             // Please write your code here.
-            String[] ymd = date.split("-");
             w[i] = new Info(
-                ymd[0],
-                ymd[1],
-                ymd[2],
+                date,
                 day,
                 weather
             );
         }
 
         Arrays.sort(w, (o1, o2) -> {
-                if(o1.y != o2.y) {
-                    return o1.y.compareTo(o2.y);
-                } else if(o1.m != o2.m) {
-                    return o1.m.compareTo(o2.m);
-                } else {
-                    return o1.d.compareTo(o2.d);
-                }
-            });
+            return o1.date.compareTo(o2.date);
+        });
         
         for(int i = 0; i < n; i++){
             if(w[i].W.equals("Rain")) {
@@ -39,21 +30,17 @@ public class Main {
 }
 
 class Info {
-    String y;
-    String m;
-    String d;
+    String date;
     String D;
     String W;
 
-    public Info(String y, String m, String d, String D, String W) {
-        this.y = y;
-        this.m = m;
-        this.d = d;
+    public Info(String date, String D, String W) {
+        this.date = date;
         this.D = D;
         this.W = W;
     }
 
     public String toInfo() {
-        return y + "-" + m +"-" + d + " " + D + " " + W;
+        return date + " " + D + " " + W;
     }
 }
