@@ -24,7 +24,7 @@ public class Main {
         knightMapInfo = new int[L + 2][L + 2];
         trapMap = new int[L + 2][L + 2];
         Knights = new Knight[N + 1];
-
+        int[] hp = new int[N + 1];
 
         for(int i = 0; i < (L + 2); i++) {
             if(i == 0 || i == L + 1) {
@@ -68,6 +68,7 @@ public class Main {
             int k = sc.nextInt();
 
             Knights[i] = new Knight(i, new int[]{r, c}, h, w, k);
+            hp[i] = k;
             for(int row = r; row < r + h; row++) {
                 for(int col = c; col < c + w; col++) {
                     knightMapInfo[row][col] = i;
@@ -106,20 +107,23 @@ public class Main {
                     Knights[k.index].leftTop = k.moveTopLeft(direction[dir]);
                     //기존 맵에 있는 정보 자기 인덱스로 변경
                     int damage = 0;
-                    for(int row = k.leftTop[0]; row < k.leftTop[0] + k.h; row++ ) {
-                        for(int col = k.leftTop[1]; col < k.leftTop[1] + k.w; col++) {
-                            knightMapInfo[row][col] = k.index;
+                    for(int row = Knights[k.index].leftTop[0]; row < Knights[k.index].leftTop[0] + Knights[k.index].h; row++ ) {
+                        for(int col = Knights[k.index].leftTop[1]; col < Knights[k.index].leftTop[1] + Knights[k.index].w; col++) {
+                            knightMapInfo[row][col] = Knights[k.index].index;
                             if(trapMap[row][col] == 1) {
                                 damage++;
                             }
                         }
                     }
-                    if(Knights[k.index].k < damage) {
-                        answer += Knights[k.index].k;
-                    } else {
-                        answer += damage;
+                    
+                    if(Knights[k.index].index != selectedKnight.index) {
+                        if(Knights[k.index].k < damage) {
+                            Knights[k.index].k = 0;
+                        } else {
+                            Knights[k.index].k -= damage;
+                        }
+                        
                     }
-                    Knights[k.index].k -= damage;
 
                     //죽으면 다시 0으로 변경
                     if(Knights[k.index].k <= 0) {
@@ -130,15 +134,30 @@ public class Main {
                         }
                     }
                 }
+
+                // //변경된 결과 출력
+                // System.out.println("\n " + i + "번 명령문");
+                // for(int r = 0; r < L + 2; r++) {
+                //     for(int c = 0; c < L + 2; c++) {
+                //         System.out.print(knightMapInfo[r][c] +" ");
+                //     }
+                //     System.out.println();
+                // }
             }
         }
 
+        for(int i = 1; i <= N; i++) {
+            if(Knights[i].k != 0) {
+                answer += (hp[i] - Knights[i].k);
+            }
+        }
         System.out.println(answer);
     }
 
     public static boolean isMove(Knight knight, int[] dir, List<Knight> moveKnight) {
         Queue<Knight> queue = new LinkedList<>();
         queue.add(knight);
+        moveKnight.add(knight);
 
         while(!queue.isEmpty()) {
             Knight k = queue.poll();
