@@ -10,6 +10,7 @@ public class Main {
         {1, 0},
         {0, -1}
     };
+    static int N;
 
     public static void main(String[] args) {
         // Please write your code here.
@@ -17,7 +18,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         int L = sc.nextInt();
-        int N = sc.nextInt();
+        N = sc.nextInt();
         int Q = sc.nextInt();
 
         //-1은 벽
@@ -158,7 +159,8 @@ public class Main {
         Queue<Knight> queue = new LinkedList<>();
         queue.add(knight);
         moveKnight.add(knight);
-
+        boolean[] visited = new boolean[N + 1];
+        visited[knight.index] = true;
         while(!queue.isEmpty()) {
             Knight k = queue.poll();
             // System.out.println("isAvailable Start");
@@ -168,8 +170,11 @@ public class Main {
                 for(int row = getMoveLeftTop[0]; row < getMoveLeftTop[0] + k.h; row++) {
                     for(int col = getMoveLeftTop[1]; col < getMoveLeftTop[1] + k.w; col++) {
                         if(knightMapInfo[row][col] != 0 && knightMapInfo[row][col] != k.index) {
-                            queue.add(Knights[knightMapInfo[row][col]]);
-                            moveKnight.add(Knights[knightMapInfo[row][col]]);
+                            if(!visited[Knights[knightMapInfo[row][col]].index]) {
+                                visited[Knights[knightMapInfo[row][col]].index] = true;
+                                queue.add(Knights[knightMapInfo[row][col]]);
+                                moveKnight.add(Knights[knightMapInfo[row][col]]);
+                            }
                         }
                     }
                 }
